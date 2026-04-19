@@ -1,0 +1,1149 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Jesenice"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.95655509151138,
+          46.4465917621703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Radovljica 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.939611401317546,
+          46.333907290888455
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Radovljica 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.1885660657478,
+          46.34470890448781
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kranj 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.370659991339876,
+          46.262469741349044
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kranj 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.293351750446543,
+          46.21989259614321
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kranj 3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.41666215920689,
+          46.307517043342116
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tržič"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.338419751058645,
+          46.38031462304117
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Škofja Loka 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.278433864545907,
+          46.16882780579275
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Škofja Loka 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.117630765013304,
+          46.14316273536928
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kamnik"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.713983614553683,
+          46.27041404273113
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Idrija"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.000004893189654,
+          46.03529096719352
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tolmin"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.693004506894162,
+          46.22500634552269
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Piran"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.379633640068125,
+          45.56897825546972
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Izola"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.413515789906016,
+          45.60412140427278
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Koper 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.55023282461334,
+          45.6491633853008
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Koper 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.83528093125434,
+          45.51685091993309
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sežana"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.863802427506165,
+          45.67199185995843
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ilirska Bistrica"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.295990043608347,
+          45.57742424096505
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Postojna"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.239215816720995,
+          45.75055398700065
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Nova Gorica 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.672655816180027,
+          45.99359733821325
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Nova Gorica 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.667686933871886,
+          45.950319049816045
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ajdovščina"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.93133478076901,
+          45.880934751805924
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Logatec"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.339198506687854,
+          45.808590954053784
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Vrhnika"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.305046433824847,
+          45.94366822592909
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ljubljana Vič-Rudnik 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.526440764185033,
+          45.91341673388069
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ljubljana Vič-Rudnik 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.838870598808215,
+          45.51562601253569
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ljubljana Vič-Rudnik 3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.677444104484694,
+          45.559463751568764
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ljubljana Vič-Rudnik 4"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.344548466539443,
+          46.05039150257877
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ljubljana Center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.774549615383846,
+          45.60926236305162
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ljubljana Šiška 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.720924113525559,
+          45.66512515997084
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ljubljana Šiška 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.639236426836334,
+          45.677494440346756
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ljubljana Šiška 3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.639370514912294,
+          45.72573614601192
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ljubljana Šiška 4"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.43374681967286,
+          46.14169465707397
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kočevje"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.899137094009795,
+          45.61781437795757
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ribnica-Dobrepolje"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.689794332735346,
+          45.73745597416298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Grosuplje"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.66942484706327,
+          45.944174467487436
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ivančna Gorica"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.815005456915294,
+          45.90422984906842
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ljubljana Moste-Polje 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.648428112811995,
+          46.05352374085816
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ljubljana Moste-Polje 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.873275095531936,
+          45.59945595021916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ljubljana Moste-Polje 3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.938158288354431,
+          45.648977130180576
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ljubljana Bežigrad 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.93427803557014,
+          45.734110819908
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ljubljana Bežigrad 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.816306875999608,
+          45.6691772082215
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Domžale 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.741135836691978,
+          46.15129577101423
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Domžale 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.57014791914277,
+          46.14485237398489
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Šentjur"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.433010870071055,
+          46.1885809966014
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Celje 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.282502270693868,
+          46.27660418205142
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Celje 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.2595808432709,
+          46.22510359366682
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Žalec 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.136783982718146,
+          46.29947428476762
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Žalec 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.053983695738758,
+          46.2578045641072
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mozirje"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.786601096954909,
+          46.34434188950506
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Velenje 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.13717322928318,
+          46.362655836866836
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Velenje 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.005967584028996,
+          46.3803696210298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Slovenj Gradec"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.14084016625691,
+          46.47637984740486
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ravne na Koroškem"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.844700370414852,
+          46.51509603902743
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Radlje"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.18408266329874,
+          46.57329682518624
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Črnomelj"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.216179830617131,
+          45.57428893162691
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Novo mesto 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.102025561883407,
+          45.78103577610389
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Novo mesto 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.153043919928365,
+          45.80396158829757
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Trebnje"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.044995568981344,
+          45.93022246189591
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Brežice"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.611228434017342,
+          45.93802185546644
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Krško"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.45208578590439,
+          45.93129995352123
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sevnica"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.255881860479963,
+          45.97813254039788
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Laško"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.220859210721265,
+          46.113124214713366
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Litija"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.905694999927183,
+          46.04968547887986
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hrastnik-Trbovlje"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.084741625300342,
+          46.13730388864838
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Zagorje"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.948914873029121,
+          46.128808442833325
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Šmarje pri Jelšah"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.617276550002847,
+          46.142829750788465
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Slovenska Bistrica"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.52507879014792,
+          46.38545657069539
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Slovenske Konjice"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.39114825189609,
+          46.37927018805125
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ruše"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.436711480347178,
+          46.55941622248233
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Maribor 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.622396665640554,
+          46.50421469991378
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Maribor 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.711468438572616,
+          46.480944553935416
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Maribor 3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.730656398032723,
+          46.53207984921077
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Maribor 4"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.05858353176722,
+          46.11675492285705
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Maribor 5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.02645011132783,
+          46.04652216279201
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Maribor 6"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.973996275213112,
+          45.98032661359655
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Maribor 7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.049618531037126,
+          46.00596507311981
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Lendava"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.419494861308223,
+          46.58851556107856
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ormož"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.15716990948452,
+          46.443129702395645
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ljutomer"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.163720944686087,
+          46.536844782416274
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Murska Sobota 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.182144409785085,
+          46.73893038089023
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Murska Sobota 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.217631863517497,
+          46.64049534041518
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gornja Radgona"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.947188305739598,
+          46.617468446551435
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Lenart"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.86655875281306,
+          46.59748694594862
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Pesnica"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.673864460139148,
+          46.63417057955645
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ptuj 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.917280150047288,
+          46.457012816460235
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ptuj 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.865894206069763,
+          46.41967388091195
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ptuj 3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.87089214442053,
+          46.34586939143737
+        ]
+      }
+    }
+  ]
+}

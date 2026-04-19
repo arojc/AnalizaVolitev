@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 # 1. NALOŽI PODATKE
 # =========================
 
-def draw_units(ax):
+def draw_units(ax, color="white"):
 
     # narisi meje volilnih enot (čez)
     enote = gpd.read_file("volilne_enote.json")
@@ -14,10 +14,10 @@ def draw_units(ax):
     enote.boundary.plot(
         ax=ax,
         linewidth=1,
-        edgecolor="black"
+        edgecolor=color
     )
 
-def draw_districts(ax):
+def draw_districts(ax, color="white"):
 
     # narisi meje volilnih enot (čez)
     okraji = gpd.read_file("volilni_okraji_mb_lj_po_1.json")
@@ -25,13 +25,16 @@ def draw_districts(ax):
     okraji.boundary.plot(
         ax=ax,
         linewidth=0.2,
-        edgecolor="black"
+        edgecolor=color
     )
 
 def posrafiraj(ax, stranka="Svoboda"):
 
     okraji = gpd.read_file("volilni_okraji_mb_lj_po_1.json")
-    mandati = pd.read_excel("mandati.ods", sheet_name=stranka)
+    try:
+        mandati = pd.read_excel("mandati.ods", sheet_name=stranka)
+    except:
+        return
 
     df = pd.read_excel("izidi26.ods", engine="odf")
 
@@ -43,13 +46,11 @@ def posrafiraj(ax, stranka="Svoboda"):
 
     gdf = gdf.to_crs(epsg=4326)
 
-    # fig, ax = plt.subplots(figsize=(10, 10))
-
     gdf.plot(
         ax=ax,
         linewidth=1,
         edgecolor="black",
-        hatch="...",
+        hatch="..",
         facecolor="none"
     )
 
@@ -96,7 +97,7 @@ def draw_map(podatek_za_prikaz="Odstotek udeležbe", trim_range=False, posrafira
     # narisi okraje (barvani)
     gdf.plot(
         column=value_col,
-        cmap="viridis",
+        cmap="YlGn",
         linewidth=0.2,
         edgecolor="white",
         legend=True,
@@ -156,7 +157,7 @@ def draw_dots():
 
 
 
-draw_map("DEMOKRATI-%", True, False)
+draw_map("NSI-%", True, False)
 # draw_dots()
 # posrafiraj()
 

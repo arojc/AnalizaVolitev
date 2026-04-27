@@ -30,6 +30,6 @@ def to_geojson():
         json.dump(geojson, f, indent=2, ensure_ascii=False)
 
 
-draw_map(2023, "NATAŠA-%", True, True)
+draw_map(2025, "PROTI-%", True, True)
 # draw_dots()
 

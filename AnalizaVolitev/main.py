@@ -7,7 +7,7 @@ def to_geojson():
 
     transformer = Transformer.from_crs("EPSG:3794", "EPSG:4326", always_xy=True)
 
-    with open("sredisca_1.json") as f:
+    with open("zemljevidi/sredisca_1.json") as f:
         data = json.load(f)
 
     features = []
@@ -20,7 +20,7 @@ def to_geojson():
             "properties": {"name": name},
             "geometry": {
                 "type": "Point",
-                "coordinates": [lon, lat]  # <-- ZDAJ PRAVILNO
+                "coordinates": [lon, lat]
             }
         })
 
@@ -30,6 +30,6 @@ def to_geojson():
         json.dump(geojson, f, indent=2, ensure_ascii=False)
 
 
-# draw_map("SVOBODA- odstotek", False)
-draw_dots()
+draw_map(2022, "SDS-%", True, True)
+# draw_dots()
 

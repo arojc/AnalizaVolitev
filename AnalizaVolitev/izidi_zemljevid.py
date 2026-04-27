@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 def draw_units(ax, color="white"):
 
     # narisi meje volilnih enot (čez)
-    enote = gpd.read_file("volilne_enote.json")
+    enote = gpd.read_file("zemljevidi/volilne_enote.json")
     enote = enote.to_crs(epsg=4326)
     enote.boundary.plot(
         ax=ax,
@@ -20,7 +20,7 @@ def draw_units(ax, color="white"):
 def draw_districts(ax, color="white"):
 
     # narisi meje volilnih enot (čez)
-    okraji = gpd.read_file("volilni_okraji_mb_lj_po_1.json")
+    okraji = gpd.read_file("zemljevidi/volilni_okraji_mb_lj_po_1.json")
     okraji = okraji.to_crs(epsg=4326)
     okraji.boundary.plot(
         ax=ax,
@@ -28,15 +28,16 @@ def draw_districts(ax, color="white"):
         edgecolor=color
     )
 
-def posrafiraj(ax, stranka="Svoboda"):
+def posrafiraj(ax, leto, stranka="Svoboda"):
 
-    okraji = gpd.read_file("volilni_okraji_mb_lj_po_1.json")
+    okraji = gpd.read_file("zemljevidi/volilni_okraji_mb_lj_po_1.json")
     try:
-        mandati = pd.read_excel("mandati.ods", sheet_name=stranka)
-    except:
+        mandati = pd.read_excel(f"volitve_{leto}/mandati_{leto}.ods", sheet_name=stranka)
+    except :
+        print()
         return
 
-    df = pd.read_excel("izidi26.ods", engine="odf")
+    df = pd.read_excel(f"volitve_{leto}/izidi_{leto}.ods", engine="odf")
 
     okraji_id = "NAZIV"
     rez_id = "Volilni Okraj"
@@ -54,18 +55,13 @@ def posrafiraj(ax, stranka="Svoboda"):
         facecolor="none"
     )
 
-    # ax.set_title("Volilni rezultati po okrajih (%)")
-    # ax.axis("off")
-
-    # plt.show()
-
-def draw_map(podatek_za_prikaz="Odstotek udeležbe", trim_range=False, posrafiram=False):
+def draw_map(leto=2026, podatek_za_prikaz="Odstotek udeležbe", trim_range=False, posrafiram=False):
 
     # GeoJSON (pričakujemo D96/TM)
-    okraji = gpd.read_file("volilni_okraji_mb_lj_po_1.json")
+    okraji = gpd.read_file("zemljevidi/volilni_okraji_mb_lj_po_1.json")
 
     # Rezultati (ODS)
-    df = pd.read_excel("izidi26.ods", engine="odf")
+    df = pd.read_excel(f"volitve_{leto}/izidi_{leto}.ods", engine="odf")
 
     # =========================
     # 2. PREVERI IMENA STOLPCEV
@@ -107,7 +103,7 @@ def draw_map(podatek_za_prikaz="Odstotek udeležbe", trim_range=False, posrafira
     )
 
     if(posrafiram):
-        posrafiraj(ax, podatek_za_prikaz.split('-')[0])
+        posrafiraj(ax, leto, podatek_za_prikaz.split('-')[0])
 
     draw_units(ax)
 
@@ -119,11 +115,11 @@ def draw_map(podatek_za_prikaz="Odstotek udeležbe", trim_range=False, posrafira
 def draw_dots():
 
     # GeoJSON s točkami
-    points = gpd.read_file("tocke.geojson")
-    mandati = pd.read_excel("mandati.ods", sheet_name="SDS")
+    points = gpd.read_file("zemljevidi/tocke.geojson")
+    mandati = pd.read_excel(f"volitve_2026/mandati_2026.ods", sheet_name="SDS")
 
     # ODS rezultati
-    df = pd.read_excel("izidi26.ods", engine="odf")
+    df = pd.read_excel("volitve_2026/izidi_2026.ods", engine="odf")
 
     # # >>> PRILAGODI <<<
     points_id = "name"  # ID v GeoJSON
@@ -157,7 +153,7 @@ def draw_dots():
 
 
 
-draw_map("NSI-%", True, False)
+# draw_map("NSI-%", True, True)
 # draw_dots()
 # posrafiraj()
 

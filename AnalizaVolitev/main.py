@@ -1,5 +1,6 @@
 from pyproj import Transformer
 import json
+import pandas as pd
 
 from izidi_zemljevid import *
 
@@ -88,10 +89,52 @@ def clean_volisca():
     # df2.to_csv("zemljevidi/volisca_zgubljena.csv")
 
 
+# def split_by_coords(files):
+#     with_coords = []
+#     without_coords = []
+#
+#     for f in files:
+#         df = pd.read_csv(f)
+#
+#         mask = df["Latitude"].notna() & df["Longitude"].notna()
+#
+#         with_coords.append(df[mask])
+#         without_coords.append(df[~mask])
+#
+#     # združi vse tri datoteke
+#     df_with = pd.concat(with_coords, ignore_index=True)
+#     df_without = pd.concat(without_coords, ignore_index=True)
+#
+#     # shrani
+#     df_with.to_csv("z_koordinatami.csv", index=False)
+#     df_without.to_csv("brez_koordinat.csv", index=False)
 
-# draw_map(2025, "PROTI-%", True, True)
+def split_by_coords(files):
+    with_coords = []
+    without_coords = []
+
+    for f in files:
+        df = pd.read_csv(f)
+
+        # če so prazni stringi
+        df[["Latitude", "Longitude"]] = df[["Latitude", "Longitude"]].replace("", pd.NA)
+
+        mask = df["Latitude"].notna() & df["Longitude"].notna()
+
+        with_coords.append(df[mask])
+        without_coords.append(df[~mask].drop(columns=["Latitude", "Longitude"]))
+
+    df_with = pd.concat(with_coords, ignore_index=True)
+    df_without = pd.concat(without_coords, ignore_index=True)
+
+    df_with.to_csv("z_koordinatami_1.csv", index=False)
+    df_without.to_csv("brez_koordinat_2.csv", index=False)
+# split_by_coords(["zemljevidi/brez_koordinat_1a.csv", "zemljevidi/brez_koordinat_2a.csv"])
+
+
+# draw_map(2022, "SVOBODA-%", True, True)
 # draw_dots()
 
-odstrani_najdena()
+# odstrani_najdena()
 # concatenate()
 

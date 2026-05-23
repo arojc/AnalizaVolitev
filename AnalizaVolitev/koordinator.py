@@ -18,12 +18,12 @@ CACHE_FILE = "zemljevidi/cache.json"
 
 def plot_two_csv(input_file):
 
-    df = pd.read_csv(input_file)
-    df1 = df.query("Longitude>13.25 and Latitude<47 and Latitude>45 and Latitude>Longitude+30.15")
-    df2 = df.query("Longitude<13.25 or Latitude>47 or Latitude<45 or Latitude<Longitude+30.15")
-    print(len(df2))
-    print(df2.columns)
-    print(df2[["Volilni okraj", "ID Volišča"]])
+    df1 = pd.read_csv(input_file)
+    # df1 = df.query("Longitude>13.25 and Latitude<47 and Latitude>45 and Latitude>Longitude+30.15")
+    # df2 = df.query("Longitude<13.25 or Latitude>47 or Latitude<45 or Latitude<Longitude+30.15")
+    # print(len(df2))
+    # print(df2.columns)
+    # print(df2[["Volilni okraj", "ID Volišča"]])
 
     fig, ax = plt.subplots()
     draw_districts(ax, "black", False)

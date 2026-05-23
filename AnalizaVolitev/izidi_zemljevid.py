@@ -17,10 +17,13 @@ def draw_units(ax, color="white"):
         edgecolor=color
     )
 
-def draw_districts(ax, color="white"):
+def draw_districts(ax, color="white", povecaj=True):
 
     # narisi meje volilnih enot (čez)
-    okraji = gpd.read_file("zemljevidi/volilni_okraji_mb_lj_po_1.json")
+    if povecaj:
+        okraji = gpd.read_file("zemljevidi/volilni_okraji_mb_lj_po_1.json")
+    else:
+        okraji = gpd.read_file("zemljevidi/volilni_okraji.json")
     okraji = okraji.to_crs(epsg=4326)
     okraji.boundary.plot(
         ax=ax,
@@ -153,7 +156,7 @@ def draw_dots():
 
 
 
-# draw_map("NSI-%", True, True)
+# draw_map(2026, "NSI-%", True, True)
 # draw_dots()
 # posrafiraj()
 

@@ -155,8 +155,8 @@ def switch_lat_lon(input_csv, output_csv):
 
 
 # convert_csv_3794_to_4326("volisca/volisca_1/volisca_vsa.csv", "volisca/volisca_1/checked_points.csv")
-convert_csv_3794_to_4326("volisca/volisca_2/volisca_vsa.csv", "volisca/volisca_2/checked_points.csv")
+# convert_csv_3794_to_4326("volisca/volisca_2/volisca_vsa.csv", "volisca/volisca_2/checked_points.csv")
 # switch_lat_lon("volisca/volisca_2/checked_points.csv", "volisca/volisca_2/checked_points.csv")
 
-plot_two_csv("volisca/volisca_2/checked_points.csv")
+# plot_two_csv("volisca/volisca_2/checked_points.csv")
 # check_points_in_polygons(2)

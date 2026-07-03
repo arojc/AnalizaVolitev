@@ -1,7 +1,12 @@
 import numpy as np
 import pandas as pd
+
+from tkinter import *
+import matplotlib
+matplotlib.use("TkAgg")
+
 import matplotlib.pyplot as plt
-import math
+
 
 default_col = "Odstotek udeležbe"
 vo = "Volilni_Okraj"
@@ -23,9 +28,53 @@ def get_data(df1, party1):
 
     return p1_old
 
-def sheet_to_csv(file):
-    df1 = pd.read_excel(f"{file}.ods", engine="odf", sheet_name="Podatki")
-    df1.to_csv(f"{file}.csv")
+def sheet_to_csv(volitve, shname="Podatki"):
+    try:
+        df1 = pd.read_excel(f"volitve_{volitve}/izidi.ods", engine="odf", sheet_name=shname)
+        df1.to_csv(f"volitve_{volitve}/{shname}.csv")
+    except:
+        print(f"{shname} not found")
+
+def remove_outliers(xs, ys, n, std=False):
+    xs = np.asarray(xs)
+    ys = np.asarray(ys)
+
+    # povprečje
+    mx = xs.mean()
+    my = ys.mean()
+
+    sx = xs.std()
+    sy = ys.std()
+
+    if std:
+        # standardizirana razdalja
+        dist = np.sqrt(
+            ((xs - mx) / sx)**2 +
+            ((ys - my) / sy)**2
+        )
+    else:
+        dist = np.sqrt(
+            (xs - mx)**2 +
+            (ys - my)**2
+        )
+
+    # # razdalja od povprečja
+    # dist = np.sqrt((xs - mx)**2 + (ys - my)**2)
+
+    # indeksi n najbolj oddaljenih
+    outliers = np.argsort(dist)[-n:]
+
+    # obdrži ostale
+    mask = np.ones(len(xs), dtype=bool)
+    mask[outliers] = False
+
+    x_new = xs[mask]
+    y_new = ys[mask]
+
+    return x_new, y_new
+
+def reg_slope(xs, ys):
+    return np.corrcoef(xs, ys)[0, 1]
 
 def reg_fun_1d(xs, ys):
 
@@ -47,10 +96,10 @@ def reg_fun(xs, ys, deg=2):
     return x, y
 
 
-def plot_party_shift(election1, election2, party1, party2):
+def plot_party_shift(election1, election2, party1, party2, level="okraji"):
 
-    df1 = pd.read_csv(election1, on_bad_lines='skip', lineterminator='\n')
-    df2 = pd.read_csv(election2, on_bad_lines='skip', lineterminator='\n')
+    df1 = pd.read_csv(f"volitve_{election1}/{level}.csv", on_bad_lines='skip', lineterminator='\n')
+    df2 = pd.read_csv(f"volitve_{election2}/{level}.csv", on_bad_lines='skip', lineterminator='\n')
 
     polling_places = df1[vo].dropna()
 
@@ -65,6 +114,9 @@ def plot_party_shift(election1, election2, party1, party2):
     xs = np.array(xs)
     ys = np.array(ys)
 
+    xs, ys = remove_outliers(xs, ys, 10)
+    xs, ys = remove_outliers(xs, ys, 20, True)
+
     plt.figure(figsize=(8, 8))
 
     plt.scatter(xs, ys, s=10, alpha=0.6)
@@ -72,17 +124,18 @@ def plot_party_shift(election1, election2, party1, party2):
     plt.axhline(0)
     plt.axvline(0)
 
-    reg_x, reg_y = reg_fun(xs, ys)
+    reg_x, reg_y = reg_fun(xs, ys, 1)
     plt.plot(reg_x, reg_y, color="red")
-    reg_x, reg_y = reg_fun(xs, ys, 4)
-    plt.plot(reg_x, reg_y, color="orange")
+    # reg_x, reg_y = reg_fun(xs, ys, 4)
+    # plt.plot(reg_x, reg_y, color="orange")
 
     plt.xlabel(f"Sprememba podpore: {party1}")
     plt.ylabel(f"Sprememba podpore: {party2}")
 
-    plt.title("Sprememba podpore po okrajih")
+    plt.title(f"Sprememba podpore po okrajih - R={reg_slope(xs, ys)}")
 
     plt.show()
+    # plt.savefig("graf.png", dpi=300, bbox_inches="tight")
 
 
 
@@ -137,13 +190,13 @@ def plot_change_histogram(election1, election2, party):
 
 
 
-def plot_change_scatter(election1, election2, party):
+def plot_change_scatter(election1, election2, party, level="okraji"):
     # =========================
     # TUKAJ NALOŽI PODATKE
     # =========================
 
-    df1 = pd.read_csv(election1, on_bad_lines='skip', lineterminator='\n')
-    df2 = pd.read_csv(election2, on_bad_lines='skip', lineterminator='\n')
+    df1 = pd.read_csv(f"volitve_{election1}/{level}.csv", on_bad_lines='skip', lineterminator='\n')
+    df2 = pd.read_csv(f"volitve_{election2}/{level}.csv", on_bad_lines='skip', lineterminator='\n')
 
     before = get_data(df1, party).dropna()
     after = get_data(df2, party).dropna()
@@ -191,25 +244,29 @@ def plot_change_scatter(election1, election2, party):
     plt.show()
 
 
-
 # =========================
 # IZVRŠLJIVA KODA
 # =========================
 
 
-# plot_change_scatter(
-#     "volitve_2022/izidi_2022.csv",
-#     "volitve_2026/izidi_2026.csv",
-#     "SVOBODA"
-# )
-
-plot_party_shift(
-    "volitve_2022/izidi_2022.csv",
-    "volitve_2026/izidi_2026.csv",
-    "SDS",
-    "DEMOKRATI"
+plot_change_scatter(
+    "2022_dz",
+    "2026_dz",
+    "SD",
+    "okraji"
 )
 
-# sheet_to_csv("volitve_2022/izidi_2022")
-# df = pd.read_csv("volitve_2026/izidi_2026.csv")
-# print(df.head(5))
+# plot_party_shift(
+#     "2022_dz",
+#     "2026_dz",
+#     "LEVICA",
+#     "RESNICA",
+#     "okraji",
+# )
+
+# def create_csvs_from_odts():
+#     for volitve in ("2018_dz", "2019_e", "2022_dz", "2022_p", "2024_e", "2025_r", "2026_dz"):
+#         for level in ("okraji", "volisca"):
+#             print(f"{volitve} - {level}")
+#             sheet_to_csv(volitve, shname=level)
+# create_csvs_from_odts()

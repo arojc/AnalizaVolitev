@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 
 default_col = "Odstotek udeležbe"
 vo = "Volilni_Okraj"
+id = "ID_Volisca"
 
 def dodaj_odstotek(word):
     return word + "-%"
@@ -23,6 +24,20 @@ def get_data(df1, party1):
     else:
         p1_old = (
             df1[[vo, dodaj_odstotek(party1)]]
+        )
+        print("Found")
+
+    return p1_old
+
+def get_data_1(df1, party1):
+
+    if dodaj_odstotek(party1) not in df1:
+        p1_old = (df1[[vo, id, default_col]])
+        p1_old[default_col] = 0
+        print("Not found")
+    else:
+        p1_old = (
+            df1[[vo, id, dodaj_odstotek(party1)]]
         )
         print("Found")
 
@@ -229,10 +244,55 @@ def plot_change_scatter(election1, election2, party, level="okraji"):
 
     plt.plot([mn, mx], [mn, mx], linestyle=":")
 
-    reg_x, reg_y = reg_fun(x, y)
-    plt.plot(reg_x, reg_y, color="red")
-    reg_x, reg_y = reg_fun(x, y, 1)
-    plt.plot(reg_x, reg_y, color="orange")
+    # reg_x, reg_y = reg_fun(x, y)
+    # plt.plot(reg_x, reg_y, color="red")
+    # reg_x, reg_y = reg_fun(x, y, 1)
+    # plt.plot(reg_x, reg_y, color="orange")
+
+    plt.xlabel("Podpora prej (%)")
+    plt.ylabel("Podpora zdaj (%)")
+
+    plt.title(f"Sprememba podpore po okrajih - {party}")
+
+    plt.axis("equal")
+
+    plt.show()
+
+def plot_change_scatter_1(election1, election2, party, level="volisca"):
+    # =========================
+    # TUKAJ NALOŽI PODATKE
+    # =========================
+
+    df1 = pd.read_csv(f"volitve_{election1}/{level}.csv", on_bad_lines='skip', lineterminator='\n')
+    df2 = pd.read_csv(f"volitve_{election2}/{level}.csv", on_bad_lines='skip', lineterminator='\n')
+
+    before = get_data_1(df1, party).dropna()
+    after = get_data_1(df2, party).dropna()
+
+    print(before.head())
+    print(before.head())
+
+    df = before.merge(
+        after,
+        on=["Volilni_Okraj", "ID_Volisca"],
+        how="inner",
+        suffixes=("_before", "_after")
+    ).fillna(0)
+
+    print(df.head())
+
+    x = df[f"{dodaj_odstotek(party)}_before"]
+    y = df[f"{dodaj_odstotek(party)}_after"]
+
+    plt.figure(figsize=(8, 8))
+
+    plt.scatter(x, y, s=1, alpha=0.7)
+
+    # diagonala brez spremembe
+    mn = min(x.min(), y.min())
+    mx = max(x.max(), y.max())
+
+    plt.plot([mn, mx], [mn, mx], linestyle=":")
 
     plt.xlabel("Podpora prej (%)")
     plt.ylabel("Podpora zdaj (%)")
@@ -249,20 +309,19 @@ def plot_change_scatter(election1, election2, party, level="okraji"):
 # =========================
 
 
-plot_change_scatter(
-    "2022_dz",
-    "2026_dz",
-    "SD",
-    "okraji"
-)
-
-# plot_party_shift(
+# plot_change_scatter(
 #     "2022_dz",
 #     "2026_dz",
-#     "LEVICA",
-#     "RESNICA",
-#     "okraji",
+#     "RESNICA"
 # )
+
+plot_party_shift(
+    "2022_dz",
+    "2026_dz",
+    "LEVICA",
+    "RESNICA",
+    "okraji",
+)
 
 # def create_csvs_from_odts():
 #     for volitve in ("2018_dz", "2019_e", "2022_dz", "2022_p", "2024_e", "2025_r", "2026_dz"):
@@ -270,3 +329,5 @@ plot_change_scatter(
 #             print(f"{volitve} - {level}")
 #             sheet_to_csv(volitve, shname=level)
 # create_csvs_from_odts()
+
+# sheet_to_csv("2026_dz", shname="volisca")

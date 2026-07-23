@@ -4,11 +4,12 @@ import pandas as pd
 from tkinter import *
 import matplotlib
 matplotlib.use("TkAgg")
-
 import matplotlib.pyplot as plt
+from scipy.stats import gaussian_kde
 
 
 default_col = "Udelezba-%"
+ve = "Volilna_Enota"
 vo = "Volilni_Okraj"
 id = "ID_Volisca"
 
@@ -29,18 +30,39 @@ def get_data(df1, party1):
 
     return p1_old
 
-def get_data_1(df1, party1):
+def get_data_1(df1, party1, level):
 
     if dodaj_odstotek(party1) not in df1:
         p1_old = (df1[["Volilna_Enota", vo, id, default_col]])
         p1_old[default_col] = 0
         p1_old = p1_old.rename(columns={default_col: dodaj_odstotek(party1)})
         print("Not found")
-    else:
+    elif level == "volisca":
         p1_old = (
-            df1[["Volilna_Enota", vo, id, dodaj_odstotek(party1)]]
+            df1[[ve, vo, id, dodaj_odstotek(party1)]]
         )
         print("Found")
+    elif level == "okraji":
+        p1_old = (
+            df1[[ve, vo, dodaj_odstotek(party1)]]
+        )
+        print("Found")
+
+    return p1_old
+
+def get_data_2(df1, datalist):
+
+    p1_old = pd.DataFrame()
+
+    for column in datalist:
+        if column not in df1:
+            p1_old.join(df1[[default_col]])
+            p1_old[default_col] = 0
+            p1_old = p1_old.rename(columns={default_col: column})
+            print("Not found")
+        else:
+            p1_old.join(df1[["Volilna_Enota", vo, id, column]])
+            print("Found")
 
     return p1_old
 
@@ -112,96 +134,74 @@ def reg_fun(xs, ys, deg=2):
     return x, y
 
 
-def plot_party_shift(election1, election2, party1, party2, level="okraji"):
+
+def get_the_points(election1, election2, party1, party2, level="volisca"):
+
+    mergeon = ["Volilna_Enota", "Volilni_Okraj"]
+    if level == "volisca":
+        mergeon.append("ID_Volisca")
 
     df1 = pd.read_csv(f"volitve_{election1}/{level}.csv", on_bad_lines='skip', lineterminator='\n')
     df2 = pd.read_csv(f"volitve_{election2}/{level}.csv", on_bad_lines='skip', lineterminator='\n')
 
-    polling_places = df1[vo].dropna()
-
-    p1_old = get_data(df1, party1).dropna()
-    p1_new = get_data(df2, party1).dropna()
-    p2_old = get_data(df1, party2).dropna()
-    p2_new = get_data(df2, party2).dropna()
-
-    xs = (p1_new.iloc[:, 1] - p1_old.iloc[:, 1]).to_numpy()
-    ys = (p2_new.iloc[:, 1] - p2_old.iloc[:, 1]).to_numpy()
-
-    xs = np.array(xs)
-    ys = np.array(ys)
-
-    # xs, ys = remove_outliers(xs, ys, 10)
-    # xs, ys = remove_outliers(xs, ys, 20, True)
-
-    plt.figure(figsize=(8, 8))
-
-    plt.scatter(xs, ys, s=10, alpha=0.6)
-
-    plt.axhline(0)
-    plt.axvline(0)
-
-    reg_x, reg_y = reg_fun(xs, ys, 1)
-    plt.plot(reg_x, reg_y, color="red")
-    # reg_x, reg_y = reg_fun(xs, ys, 4)
-    # plt.plot(reg_x, reg_y, color="orange")
-
-    plt.xlabel(f"Sprememba podpore: {party1}")
-    plt.ylabel(f"Sprememba podpore: {party2}")
-
-    plt.title(f"Sprememba podpore po okrajih - R={reg_slope(xs, ys)}")
-
-    plt.show()
-    # plt.savefig("graf.png", dpi=300, bbox_inches="tight")
-
-def plot_party_shift_1(election1, election2, party1, party2, regression=True, level="volisca"):
-
-    df1 = pd.read_csv(f"volitve_{election1}/{level}.csv", on_bad_lines='skip', lineterminator='\n')
-    df2 = pd.read_csv(f"volitve_{election2}/{level}.csv", on_bad_lines='skip', lineterminator='\n')
-
-    p1_old = get_data_1(df1, party1).dropna()
-    p1_new = get_data_1(df2, party1).dropna()
-    p2_old = get_data_1(df1, party2).dropna()
-    p2_new = get_data_1(df2, party2).dropna()
+    p1_old = get_data_1(df1, party1, level).dropna()
+    p1_new = get_data_1(df2, party1, level).dropna()
+    p2_old = get_data_1(df1, party2, level).dropna()
+    p2_new = get_data_1(df2, party2, level).dropna()
 
     pall1 = p1_old.merge(
         p1_new,
-        on=["Volilna_Enota", "Volilni_Okraj", "ID_Volisca"],
+        on=mergeon,
         how="inner",
         suffixes=("_before", "_after")
     )
     pall2 = p2_old.merge(
         p2_new,
-        on=["Volilna_Enota", "Volilni_Okraj", "ID_Volisca"],
+        on=mergeon,
         how="inner",
         suffixes=("_before", "_after")
     )
     pall = pall1.merge(
         pall2,
-        on=["Volilna_Enota", "Volilni_Okraj", "ID_Volisca"],
+        on=mergeon,
         how="inner"
     )
+    print(len(pall.index))
 
-    print(p1_old.head())
-    print(p1_new.head())
-    print(p2_old.head())
-    print(p2_new.head())
-    print(pall.head())
-    print(pall.columns )
-
-    # xs = (p1_new.iloc[:, 3] - p1_old.iloc[:, 3]).to_numpy()
-    # ys = (p2_new.iloc[:, 3] - p2_old.iloc[:, 3]).to_numpy()
     xs = (pall.iloc[:, -3] - pall.iloc[:, -4]).to_numpy()
     ys = (pall.iloc[:, -1] - pall.iloc[:, -2]).to_numpy()
-
-    # print(xs.head())
-    # print(ys.head())
 
     xs = np.array(xs)
     ys = np.array(ys)
 
+    return xs, ys
+
+def plot_party_shift(election1, election2, party1, party2, regression=True, level="volisca"):
+
+    if level == "volisca":
+        dot_size = 1
+    elif level == "okraji":
+        dot_size = 10
+
+    xs, ys = get_the_points(election1, election2, party1, party2, level)
+
+    xs = np.array(xs)
+    ys = np.array(ys)
+
+    xy = np.vstack([xs, ys])
+    z = gaussian_kde(xy)(xy)
+    idx = z.argsort()
+
     plt.figure(figsize=(8, 8))
 
-    plt.scatter(xs, ys, s=1, alpha=0.6)
+    plt.scatter(
+        xs,
+        ys,
+        s=dot_size,
+        alpha=0.6
+    )
+
+    # plt.hexbin(xs, ys, gridsize=300, cmap="viridis")
 
     plt.axhline(0)
     plt.axvline(0)
@@ -209,16 +209,13 @@ def plot_party_shift_1(election1, election2, party1, party2, regression=True, le
     if regression:
         reg_x, reg_y = reg_fun(xs, ys, 1)
         plt.plot(reg_x, reg_y, color="red")
-    # reg_x, reg_y = reg_fun(xs, ys, 4)
-    # plt.plot(reg_x, reg_y, color="orange")
 
     plt.xlabel(f"Sprememba podpore: {party1}")
     plt.ylabel(f"Sprememba podpore: {party2}")
 
-    plt.title(f"Sprememba podpore po okrajih - R={reg_slope(xs, ys)}")
+    plt.title(f"Sprememba podpore po okrajih - R={round(reg_slope(xs, ys), 3)}")
 
     plt.show()
-    # plt.savefig("graf.png", dpi=300, bbox_inches="tight")
 
 
 
@@ -383,11 +380,13 @@ def plot_change_scatter_1(election1, election2, party, level="volisca"):
 #     "RESNICA"
 # )
 
-plot_party_shift_1(
+plot_party_shift(
     "2022_dz",
     "2026_dz",
-    "SDS",
-    "DEMOKRATI"
+    "SVOBODA",
+    "DEMOKRATI",
+    True,
+    "volisca"
 )
 
 # def create_csvs_from_odts():

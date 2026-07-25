@@ -6,12 +6,15 @@ import matplotlib
 matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 from scipy.stats import gaussian_kde
+from rapidfuzz import fuzz
+import re
 
 
 default_col = "Udelezba-%"
 ve = "Volilna_Enota"
 vo = "Volilni_Okraj"
 id = "ID_Volisca"
+volisce = "Volisce"
 lvlv = "volisca"
 lvlo = "okraji"
 
@@ -45,24 +48,19 @@ def get_data_1(df1, party1, level):
 
     if dodaj_odstotek(party1) not in df1:
         if level == lvlv:
-            p1_old = (df1[[ve, vo, id, default_col]])
+            # result = (df1[[ve, vo, id, default_col]])
+            result = (df1[[ve, vo, id, volisce, default_col]])
         else:
-            p1_old = (df1[[ve, vo, default_col]])
-        p1_old[default_col] = 0
-        p1_old = p1_old.rename(columns={default_col: dodaj_odstotek(party1)})
-        print("Not found")
+            result = (df1[[ve, vo, default_col]])
+        result[default_col] = 0
+        result = result.rename(columns={default_col: dodaj_odstotek(party1)})
     elif level == lvlv:
-        p1_old = (
-            df1[[ve, vo, id, dodaj_odstotek(party1)]]
-        )
-        print("Found")
+        # result = (df1[[ve, vo, id, dodaj_odstotek(party1)]])
+        result = (df1[[ve, vo, id, volisce, dodaj_odstotek(party1)]])
     elif level == lvlo:
-        p1_old = (
-            df1[[ve, vo, dodaj_odstotek(party1)]]
-        )
-        print("Found")
+        result = (df1[[ve, vo, dodaj_odstotek(party1)]])
 
-    return p1_old
+    return result
 
 def sheet_to_csv(volitve, shname="Podatki"):
     try:
@@ -159,6 +157,9 @@ def get_the_points(election1, election2, parties, level="volisca"):
             suffixes=("_before", "_after")
         )
 
+        if level == "volisca":
+            p1 = throw_out_bad_matches(p1)
+
         if pall.empty:
             pall = p1
         else:
@@ -167,10 +168,15 @@ def get_the_points(election1, election2, parties, level="volisca"):
                 on=mergeon,
                 how="inner"
             )
+            # print(pall.head())
+
+    print(pall.columns)
 
     if len(parties) == 1:
-        xs = (pall.iloc[:, -2]).to_numpy()
-        ys = (pall.iloc[:, -1]).to_numpy()
+        # xs = (pall.iloc[:, -3]).to_numpy()
+        # ys = (pall.iloc[:, -1]).to_numpy()
+        xs = (pall[[f"{dodaj_odstotek(parties[0])}_before"]]).to_numpy()
+        ys = (pall[[f"{dodaj_odstotek(parties[0])}_after"]]).to_numpy()
     elif len(parties) == 2:
         xs = (pall.iloc[:, -3] - pall.iloc[:, -4]).to_numpy()
         ys = (pall.iloc[:, -1] - pall.iloc[:, -2]).to_numpy()
@@ -284,8 +290,8 @@ def plot_change_scatter(election1, election2, party, level="okraji"):
 
     plt.plot([mn, mx], [mn, mx], linestyle=":")
 
-    reg_x, reg_y = reg_fun(x, y)
-    plt.plot(reg_x, reg_y, color="red")
+    # reg_x, reg_y = reg_fun(x, y)
+    # plt.plot(reg_x, reg_y, color="red")
     # reg_x, reg_y = reg_fun(x, y, 1)
     # plt.plot(reg_x, reg_y, color="orange")
 
@@ -309,8 +315,7 @@ def plot_change_scatter_1(election1, election2, party, level="volisca"):
     before = get_data_1(df1, party).dropna()
     after = get_data_1(df2, party).dropna()
 
-    print(before.head())
-    print(before.head())
+    # print(before.head())
 
     df = before.merge(
         after,
@@ -319,7 +324,7 @@ def plot_change_scatter_1(election1, election2, party, level="volisca"):
         suffixes=("_before", "_after")
     ).fillna(0)
 
-    print(df.head())
+    # print(df.head())
 
     x = df[f"{dodaj_odstotek(party)}_before"]
     y = df[f"{dodaj_odstotek(party)}_after"]
@@ -344,6 +349,66 @@ def plot_change_scatter_1(election1, election2, party, level="volisca"):
     plt.show()
 
 
+
+def similarity(s1, s2):
+    # normalizacija
+    s1 = re.sub(r"\s+", " ", s1.lower()).strip()
+    s2 = re.sub(r"\s+", " ", s2.lower()).strip()
+
+    return round(fuzz.token_sort_ratio(s1, s2))
+
+def throw_out_bad_matches(p1, reliability=50):
+    print("throw_out_bad_matches - ", end='')
+    nofrowsbefore = p1.shape[0]
+
+    p1["similarity"] = p1.apply(
+        lambda row: similarity(row["Volisce_before"], row["Volisce_after"]),
+        axis=1
+    )
+    p1 = p1.drop(p1[p1.similarity < reliability].index)
+
+    p1 = p1.drop('similarity', axis=1)
+    nofrowsafter = p1.shape[0]
+    print(f"{nofrowsbefore - nofrowsafter}")
+
+    return p1
+
+
+def check_pairing(election1, election2):
+    level = "volisca"
+    mergeon = get_params_from_level(level)
+    print(mergeon)
+
+    df1 = pd.read_csv(f"volitve_{election1}/{level}.csv", on_bad_lines='skip', lineterminator='\n')
+    df2 = pd.read_csv(f"volitve_{election2}/{level}.csv", on_bad_lines='skip', lineterminator='\n')
+
+
+    p1_old = df1[[ve, vo, id, "Volisce"]]
+    p1_new = df2[[ve, vo, id, "Volisce"]]
+
+    p1 = p1_old.merge(
+        p1_new,
+        on=mergeon,
+        how="inner",
+        suffixes=("_before", "_after")
+    )
+    # p1["similarity"] = 0
+
+    p1["similarity"] = p1.apply(
+        lambda row: similarity(row["Volisce_before"], row["Volisce_after"]),
+        axis=1
+    )
+    p1.sort_values(by=["similarity"], inplace=True)
+
+    p1 = throw_out_bad_matches(p1)
+
+    # print(p1.head())
+    print(len(p1))
+    print(min(p1["similarity"]))
+    print(max(p1["similarity"]))
+
+    p1.to_csv(f"volitve_{election1}/similarity.csv", index=False)
+
 # =========================
 # IZVRŠLJIVA KODA
 # =========================
@@ -356,21 +421,21 @@ def plot_change_scatter_1(election1, election2, party, level="volisca"):
 #     "volisca"
 # )
 
-# plot_change_scatter(
-#     "2022_dz",
-#     "2026_dz",
-#     "LEVICA",
-#     "volisca"
-# )
-
-plot_party_shift(
+plot_change_scatter(
     "2022_dz",
     "2026_dz",
-    "SVOBODA",
-    "DEMOKRATI",
-    False,
+    "SD",
     "volisca"
 )
+
+# plot_party_shift(
+#     "2022_dz",
+#     "2026_dz",
+#     "SVOBODA",
+#     "DEMOKRATI",
+#     False,
+#     "volisca"
+# )
 
 # def create_csvs_from_odts():
 #     for volitve in ("2018_dz", "2019_e", "2022_dz", "2022_p", "2024_e", "2025_r", "2026_dz"):
@@ -380,3 +445,9 @@ plot_party_shift(
 # create_csvs_from_odts()
 
 # sheet_to_csv("2026_dz", shname="volisca")
+
+# check_pairing(
+#     "2026_dz",
+#     "2022_dz"
+# )
+

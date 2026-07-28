@@ -138,6 +138,35 @@ def get_params_from_level(level):
     return mergeon
 
 
+def remove_farthest(xs, ys, fraction=0.1):
+    xs = np.asarray(xs)
+    ys = np.asarray(ys)
+
+    mx = xs.mean()
+    my = ys.mean()
+    sx = xs.std()
+    sy = ys.std()
+    # mx = np.median(xs)
+    # my = np.median(ys)
+    print(f"{mx} - {my}")
+
+    # dist = (np.abs((xs - mx) / sx) +
+    #         np.abs((ys - my) / sy)
+    #)                                                       # N1
+    dist = np.sqrt(
+        ((xs - mx) / sx) ** 2 +
+        ((ys - my) / sy) ** 2
+    )                                                      # N2
+    # dist = np.maximum(
+    #     np.abs((xs - mx) / sx),
+    #     np.abs((ys - my) / sy)
+    # )                                                      # N∞
+
+    threshold = np.percentile(dist, 100 * (1 - fraction))
+    mask = dist <= threshold
+
+    return xs[mask], ys[mask]
+
 def get_the_points(election1, election2, parties, level="volisca"):
 
     pall = pd.DataFrame()
@@ -170,6 +199,7 @@ def get_the_points(election1, election2, parties, level="volisca"):
             )
             # print(pall.head())
 
+    print(parties)
     print(pall.columns)
 
     if len(parties) == 1:
@@ -178,11 +208,19 @@ def get_the_points(election1, election2, parties, level="volisca"):
         xs = (pall[[f"{dodaj_odstotek(parties[0])}_before"]]).to_numpy()
         ys = (pall[[f"{dodaj_odstotek(parties[0])}_after"]]).to_numpy()
     elif len(parties) == 2:
-        xs = (pall.iloc[:, -3] - pall.iloc[:, -4]).to_numpy()
-        ys = (pall.iloc[:, -1] - pall.iloc[:, -2]).to_numpy()
+        # xs = (pall.iloc[:, -3] - pall.iloc[:, -4]).to_numpy()
+        # ys = (pall.iloc[:, -1] - pall.iloc[:, -2]).to_numpy()
+        # xs = (pall[[f"{dodaj_odstotek(parties[0])}_after"]] - pall[[f"{dodaj_odstotek(parties[0])}_before"]]).to_numpy()
+        # ys = (pall[[f"{dodaj_odstotek(parties[1])}_after"]] - pall[[f"{dodaj_odstotek(parties[1])}_before"]]).to_numpy()
+        xs = (pall.iloc[:, -5] - pall.iloc[:, -7]).to_numpy()
+        ys = (pall.iloc[:, -1] - pall.iloc[:, -3]).to_numpy()
+        print(f"{dodaj_odstotek(parties[1])}_before")
+
 
     xs = np.array(xs)
     ys = np.array(ys)
+
+    xs, ys = remove_farthest(xs, ys, 0.1)
 
     return xs, ys
 
@@ -191,8 +229,8 @@ def plot_party_shift(election1, election2, party1, party2, regression=True, leve
     xs, ys = get_the_points(election1, election2, [party1, party2], level)
 
     xy = np.vstack([xs, ys])
-    z = gaussian_kde(xy)(xy)
-    idx = z.argsort()
+    # z = gaussian_kde(xy)(xy)
+    # idx = z.argsort()
 
     plt.figure(figsize=(8, 8))
 
@@ -421,21 +459,21 @@ def check_pairing(election1, election2):
 #     "volisca"
 # )
 
-plot_change_scatter(
-    "2022_dz",
-    "2026_dz",
-    "SD",
-    "volisca"
-)
-
-# plot_party_shift(
+# plot_change_scatter(
 #     "2022_dz",
 #     "2026_dz",
-#     "SVOBODA",
-#     "DEMOKRATI",
-#     False,
+#     "SD",
 #     "volisca"
 # )
+
+plot_party_shift(
+    "2022_dz",
+    "2026_dz",
+    "SVOBODA",
+    "SDS",
+    True,
+    "volisca"
+)
 
 # def create_csvs_from_odts():
 #     for volitve in ("2018_dz", "2019_e", "2022_dz", "2022_p", "2024_e", "2025_r", "2026_dz"):

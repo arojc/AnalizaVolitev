@@ -15,6 +15,7 @@ ve = "Volilna_Enota"
 vo = "Volilni_Okraj"
 id = "ID_Volisca"
 volisce = "Volisce"
+udelezba = "Udelezba"
 lvlv = "volisca"
 lvlo = "okraji"
 
@@ -61,6 +62,7 @@ def get_data_1(df1, party1, level):
         result = (df1[[ve, vo, dodaj_odstotek(party1)]])
 
     return result
+
 
 def sheet_to_csv(volitve, shname="Podatki"):
     try:
@@ -138,7 +140,7 @@ def get_params_from_level(level):
     return mergeon
 
 
-def remove_farthest(xs, ys, fraction=0.1):
+def remove_farthest(xs, ys, fraction=0.05):
     xs = np.asarray(xs)
     ys = np.asarray(ys)
 
@@ -167,7 +169,7 @@ def remove_farthest(xs, ys, fraction=0.1):
 
     return xs[mask], ys[mask]
 
-def get_the_points(election1, election2, parties, level="volisca"):
+def get_the_points(election1, election2, parties, remfar: float, level="volisca"):
 
     pall = pd.DataFrame()
     mergeon = get_params_from_level(level)
@@ -208,25 +210,24 @@ def get_the_points(election1, election2, parties, level="volisca"):
         xs = (pall[[f"{dodaj_odstotek(parties[0])}_before"]]).to_numpy()
         ys = (pall[[f"{dodaj_odstotek(parties[0])}_after"]]).to_numpy()
     elif len(parties) == 2:
-        # xs = (pall.iloc[:, -3] - pall.iloc[:, -4]).to_numpy()
-        # ys = (pall.iloc[:, -1] - pall.iloc[:, -2]).to_numpy()
-        # xs = (pall[[f"{dodaj_odstotek(parties[0])}_after"]] - pall[[f"{dodaj_odstotek(parties[0])}_before"]]).to_numpy()
-        # ys = (pall[[f"{dodaj_odstotek(parties[1])}_after"]] - pall[[f"{dodaj_odstotek(parties[1])}_before"]]).to_numpy()
-        xs = (pall.iloc[:, -5] - pall.iloc[:, -7]).to_numpy()
-        ys = (pall.iloc[:, -1] - pall.iloc[:, -3]).to_numpy()
-        print(f"{dodaj_odstotek(parties[1])}_before")
+        # xs = (pall.iloc[:, -5] - pall.iloc[:, -7]).to_numpy()
+        # ys = (pall.iloc[:, -1] - pall.iloc[:, -3]).to_numpy()
+        xs = (pall[f"{dodaj_odstotek(parties[0])}_after"] - pall[f"{dodaj_odstotek(parties[0])}_before"]).to_numpy()
+        ys = (pall[f"{dodaj_odstotek(parties[1])}_after"] - pall[f"{dodaj_odstotek(parties[1])}_before"]).to_numpy()
+        # print(f"{dodaj_odstotek(parties[1])}_before")
 
 
     xs = np.array(xs)
     ys = np.array(ys)
 
-    xs, ys = remove_farthest(xs, ys, 0.1)
+    if remfar > 0:
+        xs, ys = remove_farthest(xs, ys, remfar)
 
     return xs, ys
 
-def plot_party_shift(election1, election2, party1, party2, regression=True, level="volisca"):
+def plot_party_shift(election1, election2, party1, party2, level="volisca", remfar=0.0, regression=True):
 
-    xs, ys = get_the_points(election1, election2, [party1, party2], level)
+    xs, ys = get_the_points(election1, election2, [party1, party2], remfar, level)
 
     xy = np.vstack([xs, ys])
     # z = gaussian_kde(xy)(xy)
@@ -312,7 +313,7 @@ def plot_change_histogram(election1, election2, party, level="okraji"):
 
 def plot_change_scatter(election1, election2, party, level="okraji"):
 
-    x, y = get_the_points(election1, election2, [party], level)
+    x, y = get_the_points(election1, election2, [party], 0.0, level)
 
     # =========================
     # GRAF
@@ -447,10 +448,13 @@ def check_pairing(election1, election2):
 
     p1.to_csv(f"volitve_{election1}/similarity.csv", index=False)
 
+
+
+
+
 # =========================
 # IZVRŠLJIVA KODA
 # =========================
-
 
 # plot_change_histogram(
 #     "2022_dz",
@@ -463,17 +467,10 @@ def check_pairing(election1, election2):
 #     "2022_dz",
 #     "2026_dz",
 #     "SD",
-#     "volisca"
+#     "okraji"
 # )
 
-plot_party_shift(
-    "2022_dz",
-    "2026_dz",
-    "SVOBODA",
-    "SDS",
-    True,
-    "volisca"
-)
+# plot_party_shift("2022_dz", "2026_dz", "SVOBODA", "DEMOKRATI", "volisca", 0.01, True)
 
 # def create_csvs_from_odts():
 #     for volitve in ("2018_dz", "2019_e", "2022_dz", "2022_p", "2024_e", "2025_r", "2026_dz"):

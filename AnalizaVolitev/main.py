@@ -132,7 +132,7 @@ def split_by_coords(files):
 # split_by_coords(["zemljevidi/brez_koordinat_1a.csv", "zemljevidi/brez_koordinat_2a.csv"])
 
 
-# draw_map(2022, "SVOBODA-%", True, True)
+draw_map(2022, "SVOBODA-%", True, True)
 # draw_dots()
 
 # odstrani_najdena()

@@ -2,6 +2,9 @@ import geopandas as gpd
 import pandas as pd
 import matplotlib.pyplot as plt
 
+import ipywidgets as widgets
+from IPython.display import display
+
 # =========================
 # 1. NALOŽI PODATKE
 # =========================
@@ -48,7 +51,8 @@ def posrafiraj(ax, leto, stranka="Svoboda"):
     df = pd.read_csv(f"volitve_{leto}/okraji.csv", on_bad_lines='skip', lineterminator='\n')
 
     okraji_id = "NAZIV"
-    rez_id = stolpec_okraj
+    # rez_id = stolpec_okraj
+    rez_id = "Volilni_Okraj_Ime"
 
     gdf = okraji.merge(df, left_on=okraji_id, right_on=rez_id)
     gdf = gdf.merge(mandati, left_on=okraji_id, right_on="Okraj")
@@ -70,8 +74,10 @@ def draw_map(leto, podatek_za_prikaz="Odstotek udeležbe", trim_range=False, pos
     df = pd.read_csv(f"volitve_{leto}/okraji.csv", on_bad_lines='skip', lineterminator='\n')
 
     # >>> TU PRILAGODI IMENA <<<
+    # okraji_id = "NAZIV"
+    # rez_id = stolpec_okraj
     okraji_id = "NAZIV"
-    rez_id = stolpec_okraj
+    rez_id = "Volilni_Okraj_Ime"
     value_col = podatek_za_prikaz   # npr. % glasov
 
     gdf = okraji.merge(df, left_on=okraji_id, right_on=rez_id)
@@ -102,7 +108,8 @@ def draw_map(leto, podatek_za_prikaz="Odstotek udeležbe", trim_range=False, pos
     if(posrafiram):
         posrafiraj(ax, leto, podatek_za_prikaz.split('-')[0])
 
-    draw_units(ax)
+    draw_districts(ax, "black")
+    draw_units(ax, "black")
 
     ax.set_title("Volilni rezultati po okrajih (%)")
     ax.axis("off")
@@ -148,7 +155,17 @@ def draw_dots():
     plt.show()
 
 
-draw_map("2018_dz", "SD-%", True, True)
+# elections = ["2022_dz", "2026_dz"]
+# parties = ["SDS", "SVOBODA", "SD", "NSI", "LEVICA"]
+# widgets.interact(
+#     draw_map,
+#     leto="2022_dz",
+#     podatek_za_prikaz=parties,
+#     trim_range=parties,
+#     posrafiram=parties
+# )
+
+draw_map("2022_dz", "SDS-%", True, False)
 # draw_dots()
 # posrafiraj()
 

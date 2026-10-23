@@ -9,6 +9,9 @@ from scipy.stats import gaussian_kde
 from rapidfuzz import fuzz
 import re
 
+import plotly.graph_objects as go
+
+
 
 default_col = "Udelezba-%"
 ve = "Volilna_Enota"
@@ -62,6 +65,65 @@ def get_data_1(df1, party1, level):
         result = (df1[[ve, vo, dodaj_odstotek(party1)]])
 
     return result
+
+def similarity(s1, s2):
+    # normalizacija
+    s1 = re.sub(r"\s+", " ", s1.lower()).strip()
+    s2 = re.sub(r"\s+", " ", s2.lower()).strip()
+
+    return round(fuzz.token_sort_ratio(s1, s2))
+
+def throw_out_bad_matches(p1, reliability=50):
+    print("throw_out_bad_matches - ", end='')
+    nofrowsbefore = p1.shape[0]
+
+    p1["similarity"] = p1.apply(
+        lambda row: similarity(row["Volisce_before"], row["Volisce_after"]),
+        axis=1
+    )
+    p1 = p1.drop(p1[p1.similarity < reliability].index)
+
+    p1 = p1.drop('similarity', axis=1)
+    nofrowsafter = p1.shape[0]
+    print(f"{nofrowsbefore - nofrowsafter}")
+
+    return p1
+
+def check_pairing(election1, election2):
+    level = "volisca"
+    mergeon = get_params_from_level(level)
+    print(mergeon)
+
+    df1 = pd.read_csv(f"volitve_{election1}/{level}.csv", on_bad_lines='skip', lineterminator='\n')
+    df2 = pd.read_csv(f"volitve_{election2}/{level}.csv", on_bad_lines='skip', lineterminator='\n')
+
+
+    p1_old = df1[[ve, vo, id, "Volisce"]]
+    p1_new = df2[[ve, vo, id, "Volisce"]]
+
+    p1 = p1_old.merge(
+        p1_new,
+        on=mergeon,
+        how="inner",
+        suffixes=("_before", "_after")
+    )
+    # p1["similarity"] = 0
+
+    p1["similarity"] = p1.apply(
+        lambda row: similarity(row["Volisce_before"], row["Volisce_after"]),
+        axis=1
+    )
+    p1.sort_values(by=["similarity"], inplace=True)
+
+    p1 = throw_out_bad_matches(p1)
+
+    # print(p1.head())
+    print(len(p1))
+    print(min(p1["similarity"]))
+    print(max(p1["similarity"]))
+
+    p1.to_csv(f"volitve_{election1}/similarity.csv", index=False)
+
 
 
 def sheet_to_csv(volitve, shname="Podatki"):
@@ -201,8 +263,8 @@ def get_the_points(election1, election2, parties, remfar: float, level="volisca"
             )
             # print(pall.head())
 
-    print(parties)
-    print(pall.columns)
+    # print(parties)
+    # print(pall.columns)
 
     if len(parties) == 1:
         # xs = (pall.iloc[:, -3]).to_numpy()
@@ -389,64 +451,122 @@ def plot_change_scatter_1(election1, election2, party, level="volisca"):
 
 
 
-def similarity(s1, s2):
-    # normalizacija
-    s1 = re.sub(r"\s+", " ", s1.lower()).strip()
-    s2 = re.sub(r"\s+", " ", s2.lower()).strip()
 
-    return round(fuzz.token_sort_ratio(s1, s2))
+def interactive_change_scatter(election1, election2, parties, level="okraji"):
+    fig = go.Figure()
+    trace_count = 0
+    party_traces = []
 
-def throw_out_bad_matches(p1, reliability=50):
-    print("throw_out_bad_matches - ", end='')
-    nofrowsbefore = p1.shape[0]
+    # Podatki za vsako stranko
+    for party in parties:
+        x, y = get_the_points(
+            election1, election2, [party], 0.0, level
+        )
+        print(len(x))
 
-    p1["similarity"] = p1.apply(
-        lambda row: similarity(row["Volisce_before"], row["Volisce_after"]),
-        axis=1
+        x = np.asarray(x, dtype=float)
+        y = np.asarray(y, dtype=float)
+
+        # Odstrani manjkajoče in neveljavne vrednosti
+        valid = np.isfinite(x) & np.isfinite(y)
+        x, y = x[valid], y[valid]
+        print(f"Get the points  {len(x)} - {len(y)}")
+
+        party_traces.append(trace_count)
+
+        fig.add_trace(go.Scatter(
+            x=x,
+            y=y,
+            mode="markers",
+            name=party,
+            visible=(len(party_traces) == 1),
+            marker=dict(size=8, opacity=0.7),
+            text=[party] * len(x),
+            hovertemplate=(
+                "Podpora prej: %{x:.2f}%<br>"
+                "Podpora zdaj: %{y:.2f}%"
+                "<extra>%{text}</extra>"
+            ),
+        ))
+
+        trace_count += 1
+
+    # Diagonala: podpora se ni spremenila
+    fig.add_trace(go.Scatter(
+        x=[0, 1],
+        y=[0, 1],
+        mode="lines",
+        name="Brez spremembe",
+        line=dict(dash="dot", color="gray"),
+        visible=True,
+        hoverinfo="skip",
+    ))
+
+    # Spustni seznam za izbiro stranke
+    buttons = []
+
+    for selected_index, party in enumerate(parties):
+        visibility = [
+            i == selected_index for i in range(len(parties))
+        ]
+        visibility.append(True)  # Diagonala ostane vidna
+
+        buttons.append(dict(
+            label=party,
+            method="update",
+            args=[
+                {"visible": visibility},
+                {"title": f"Sprememba podpore – {party}"},
+            ],
+        ))
+
+    fig.update_layout(
+        title="Sprememba podpore",
+        xaxis_title="Podpora prej (%)",
+        yaxis_title="Podpora zdaj (%)",
+        updatemenus=[dict(
+            buttons=buttons,
+            direction="down",
+            x=0,
+            y=1.15,
+            xanchor="left",
+            yanchor="top",
+        )],
+        template="plotly_white",
+        width=850,
+        height=750,
     )
-    p1 = p1.drop(p1[p1.similarity < reliability].index)
 
-    p1 = p1.drop('similarity', axis=1)
-    nofrowsafter = p1.shape[0]
-    print(f"{nofrowsbefore - nofrowsafter}")
+    # fig.update_xaxes(range=[0, 1], constrain="domain")
+    # fig.update_yaxes(range=[0, 1], scaleanchor="x", scaleratio=1)
 
-    return p1
+    # Največja vrednost med vsemi podatki na obeh oseh
+    all_values = []
 
+    for party in parties:
+        x, y = get_the_points(
+            election1, election2, [party], 0.0, level
+        )
 
-def check_pairing(election1, election2):
-    level = "volisca"
-    mergeon = get_params_from_level(level)
-    print(mergeon)
+        x = np.asarray(x, dtype=float)
+        y = np.asarray(y, dtype=float)
 
-    df1 = pd.read_csv(f"volitve_{election1}/{level}.csv", on_bad_lines='skip', lineterminator='\n')
-    df2 = pd.read_csv(f"volitve_{election2}/{level}.csv", on_bad_lines='skip', lineterminator='\n')
+        all_values.extend(x[np.isfinite(x)].tolist())
+        all_values.extend(y[np.isfinite(y)].tolist())
 
+    max_value = max(all_values, default=0)
 
-    p1_old = df1[[ve, vo, id, "Volisce"]]
-    p1_new = df2[[ve, vo, id, "Volisce"]]
+    # Zaokroži zgornjo mejo navzgor na naslednjih 5 odstotnih točk
+    axis_max = max_value * 1.05
 
-    p1 = p1_old.merge(
-        p1_new,
-        on=mergeon,
-        how="inner",
-        suffixes=("_before", "_after")
-    )
-    # p1["similarity"] = 0
+    fig.update_xaxes(range=[0, axis_max], constrain="domain")
+    fig.update_yaxes(range=[0, axis_max], scaleanchor="x", scaleratio=1)
 
-    p1["similarity"] = p1.apply(
-        lambda row: similarity(row["Volisce_before"], row["Volisce_after"]),
-        axis=1
-    )
-    p1.sort_values(by=["similarity"], inplace=True)
+    # Diagonala naj se konča pri novi zgornji meji
+    fig.data[-1].x = [0, axis_max]
+    fig.data[-1].y = [0, axis_max]
 
-    p1 = throw_out_bad_matches(p1)
-
-    # print(p1.head())
-    print(len(p1))
-    print(min(p1["similarity"]))
-    print(max(p1["similarity"]))
-
-    p1.to_csv(f"volitve_{election1}/similarity.csv", index=False)
+    fig.show()
 
 
 
@@ -455,6 +575,13 @@ def check_pairing(election1, election2):
 # =========================
 # IZVRŠLJIVA KODA
 # =========================
+
+interactive_change_scatter(
+    "2022_dz",
+    "2026_dz",
+    ["SVOBODA", "SDS", "SD", "NSI", "DEMOKRATI"],
+    level="okraji"
+)
 
 # plot_change_histogram(
 #     "2022_dz",

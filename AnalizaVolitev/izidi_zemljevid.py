@@ -165,7 +165,7 @@ def draw_dots():
 #     posrafiram=parties
 # )
 
-draw_map("2022_dz", "SDS-%", True, False)
+draw_map("2026_dz", "DEMOKRATI-%", True, True)
 # draw_dots()
 # posrafiraj()
 
